@@ -1,0 +1,28 @@
+# === OS ===
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# === PHP ===
+vendor/
+app/Cache/
+
+# === Environment (credentials) ===
+.env
+
+# === Logs ===
+*.log
+
+# === Node.js ===
+node_modules/
+
+# === IDE ===
+.idea/
+.vscode/
+*.sublime-*
+
+# === Kilo dev tool ===
+.kilo/node_modules/

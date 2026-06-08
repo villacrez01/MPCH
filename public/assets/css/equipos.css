@@ -1,0 +1,310 @@
+/**
+ * OTI — Inventario de Equipos (módulo admin)
+ */
+
+.equipos-page .page-header {
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.equipos-page .btn-new {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    box-shadow: 0 4px 16px rgba(30, 63, 95, 0.22);
+    padding: 11px 22px;
+}
+
+.equipos-page .btn-new [data-lucide] {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+}
+
+/* ── Modal equipo premium ── */
+.modal-equipo {
+    max-width: 820px;
+    border: 1px solid var(--border-light);
+}
+
+.modal-equipo-header {
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px 24px 18px;
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg-subtle) 100%);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-equipo-header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.modal-equipo-kicker {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--gold-dark);
+    margin-bottom: 4px;
+}
+
+.modal-equipo-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 4px 0 0;
+    font-weight: 400;
+}
+
+.modal-equipo .modal-title {
+    font-size: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.modal-equipo .modal-title [data-lucide] {
+    width: 22px;
+    height: 22px;
+    stroke: var(--primary);
+    color: var(--primary);
+}
+
+.modal-equipo-body {
+    padding: 0;
+    background: #fafbfc;
+}
+
+.modal-equipo-footer {
+    padding: 16px 24px;
+    background: #fff;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.modal-equipo-footer .btn-cancel,
+.modal-equipo-footer .btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 22px;
+}
+
+.modal-equipo-footer .btn-cancel [data-lucide],
+.modal-equipo-footer .btn-submit [data-lucide] {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+}
+
+.btn-submit--gold {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%) !important;
+    box-shadow: 0 4px 14px rgba(184, 149, 61, 0.35) !important;
+}
+
+.btn-submit--gold:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+/* Secciones del formulario */
+.equipo-form-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 0 16px;
+}
+
+.equipo-form-section {
+    background: #ffffff;
+    margin: 12px 20px 0;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+}
+
+.equipo-form-section-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: linear-gradient(90deg, var(--primary-soft) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.equipo-form-section-head [data-lucide] {
+    width: 18px;
+    height: 18px;
+    stroke: var(--gold-dark);
+    color: var(--gold-dark);
+}
+
+.equipo-form-section-body {
+    padding: 16px;
+}
+
+.equipo-form-section-body .form-row:last-child {
+    margin-bottom: 0;
+}
+
+.equipo-form-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: -4px 0 12px;
+    line-height: 1.45;
+}
+
+.equipo-form-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 48px 24px;
+    color: var(--text-muted);
+}
+
+.equipo-form-loading [data-lucide] {
+    width: 32px;
+    height: 32px;
+    stroke: var(--primary);
+    animation: equipos-spin 0.9s linear infinite;
+}
+
+@keyframes equipos-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Dropdown acciones (sin conflicto con action-dd.js global) */
+.equipos-dd-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all var(--duration-fast);
+}
+
+.equipos-dd-btn:hover {
+    border-color: var(--border-medium);
+    background: var(--bg-hover);
+    color: var(--primary);
+}
+
+.equipos-dd-btn [data-lucide] {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+}
+
+.action-dd__menu {
+    box-shadow: var(--shadow-5);
+    border-radius: var(--radius-md);
+    animation: equipos-dd-in 0.15s var(--ease-out);
+}
+
+@keyframes equipos-dd-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.action-dd__item [data-lucide] {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+/* Lucide en stats / tabla */
+.equipos-page .stat-icon [data-lucide] {
+    stroke: currentColor;
+    fill: none;
+}
+
+.equipos-page .action-btn [data-lucide] {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+}
+
+body.modal-equipos-open {
+    overflow: hidden;
+}
+
+/* Responsive tabla móvil */
+@media (max-width: 900px) {
+  .equipos-page .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .equipos-page .filter-group {
+    min-width: 100%;
+    width: 100%;
+  }
+  .equipos-page .filter-select {
+    min-width: 100%;
+    width: 100%;
+  }
+  .equipos-page .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .equipos-page .btn-new {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-equipo {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .equipo-form-section {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+  .equipo-form-section-body .form-row {
+    grid-template-columns: 1fr;
+  }
+  .modal-equipo-footer {
+    flex-direction: column-reverse;
+  }
+  .modal-equipo-footer .btn-cancel,
+  .modal-equipo-footer .btn-submit {
+    width: 100%;
+  }
+  .table-card table {
+    min-width: 720px;
+  }
+}
+
+@media (max-width: 640px) {
+  .equipos-page .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pagination-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pagination-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
