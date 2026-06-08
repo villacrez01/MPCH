@@ -1,2 +1,2 @@
 # MPCH
-Proyecto casi terminado, en proceso de fiinalizacion
+Proyecto casi terminado, en proceso de finalizacion
