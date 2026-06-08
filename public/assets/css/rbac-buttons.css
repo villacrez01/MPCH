@@ -1,0 +1,258 @@
+/* RBAC Button Styles - Sistema de Botones Dinámicos */
+
+:root {
+  --primary: #4338ca;
+  --primary-hover: #3730a3;
+  --primary-soft: #e0e7ff;
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-soft: #dcfce7;
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-soft: #fef3c7;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-soft: #fee2e2;
+  --info: #06b6d4;
+  --info-hover: #0891b2;
+  --info-soft: #cffafe;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --focus-ring: #6366f1;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+}
+
+/* Contenedor principal */
+.rbac-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botón base */
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  text-decoration: none;
+  line-height: 1;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+.action-button:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Variantes */
+.action-button--primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 4px rgba(67, 56, 202, 0.15);
+}
+
+.action-button--primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(67, 56, 202, 0.25);
+}
+
+.action-button--secondary {
+  background: white;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.action-button--secondary:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.action-button--success {
+  background: var(--success);
+  color: white;
+}
+
+.action-button--success:hover:not(:disabled) {
+  background: var(--success-hover);
+}
+
+.action-button--warning {
+  background: var(--warning);
+  color: white;
+}
+
+.action-button--warning:hover:not(:disabled) {
+  background: var(--warning-hover);
+}
+
+.action-button--danger {
+  background: var(--danger);
+  color: white;
+}
+
+.action-button--danger:hover:not(:disabled) {
+  background: var(--danger-hover);
+}
+
+.action-button--info {
+  background: var(--info);
+  color: white;
+}
+
+.action-button--info:hover:not(:disabled) {
+  background: var(--info-hover);
+}
+
+/* Tamaños */
+.action-button--sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.action-button--lg {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.action-button--icon {
+  padding: 10px;
+  width: 36px;
+  height: 36px;
+}
+
+/* Estados */
+.action-button:disabled,
+.action-button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.action-button.loading {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.action-button.loading .button-text {
+  opacity: 0.7;
+}
+
+/* Spinner de carga */
+.spinner {
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Iconos */
+.action-button svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* Botón icon-only */
+.action-button--icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Grupo de botones */
+.action-button-group {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.action-button-group .action-button {
+  border-radius: 0;
+}
+
+.action-button-group .action-button:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.action-button-group .action-button:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.action-button-group .action-button:only-child {
+  border-radius: var(--radius-sm);
+}
+
+/* Estados activos (pressed) */
+.action-button:active:not(:disabled) {
+  transform: scale(0.98);
+  transition-duration: 100ms;
+}
+
+/* Loading state con spinner inline */
+.action-button--loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.action-button--loading::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+/* Tooltip para botones deshabilitados */
+.action-button[aria-disabled="true"]:hover::before {
+  content: attr(data-no-permission-msg);
+  position: absolute;
+  background: #1e293b;
+  color: white;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 100;
+  margin-top: -30px;
+}
+
+/* Accesibilidad - Screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,130 @@
+meta_judge_evaluation:
+  name: "Meta-Juez de Evaluación — OTI Rendimiento (Fase 3.5)"
+  version: "1.0"
+  task: "Evaluar las 3 soluciones completas de optimización de rendimiento generadas en Fase 3"
+
+  solutions:
+    - id: "C-E1"
+      name: "Cache First, Polling Last"
+      file: ".specs/research/oti-rendimiento-2026-05-21.expansion-C-E1.md"
+      description: "APCu caching layer + dirty flag SSE + frontend throttling"
+    - id: "A-E1"
+      name: "Unificación de Canales en Tiempo Real + Cache Condicional"
+      file: ".specs/research/oti-rendimiento-2026-05-21.expansion-A-E1.md"
+      description: "ETag/304 condicional + heartbeat triggers + SSE central + eliminación total de polling"
+    - id: "B-E1"
+      name: "Consolidación de Queries + Estrategia de Índices"
+      file: ".specs/research/oti-rendimiento-2026-05-21.expansion-B-E1.md"
+      description: "COUNT(*) FILTER + JSON_BUILD_OBJECT + CTE recursiva + 8 índices compuestos + cache estático"
+
+  criteria:
+    - id: cobertura_problemas
+      name: "Cobertura de Cuellos de Botella Identificados"
+      weight: 20
+      description: "¿Qué porcentaje de los ~30 cuellos de botella (queries N+1, polling excesivo, falta de índices, sesión regenerada, etc.) resuelve la solución?"
+      rubric:
+        90-100: "Resuelve >=85% de los problemas identificados en el diagnóstico original"
+        70-89:  "Resuelve >=65% de los problemas"
+        50-69:  "Resuelve >=45% de los problemas"
+        0-49:   "Resuelve <45% de los problemas"
+
+    - id: calidad_codigo
+      name: "Calidad del Código Propuesto"
+      weight: 20
+      description: "Evaluación de código concreto (PHP, JS, SQL): corrección sintáctica, manejo de errores, patrones utilizados, edge cases, null-safety, tipos, fallbacks"
+      rubric:
+        90-100: "Código sintácticamente correcto y completo (sin pseudo-código). Manejo exhaustivo de errores con try/catch y fallbacks. Patrones adecuados (guard clause, early return). Edge cases cubiertos: null/empty, concurrencia (stampede), failover graceful"
+        70-89:  "Código correcto con mínimos errores menores. Manejo de errores básico. Patrones adecuados pero faltan algunos edge cases o fallbacks"
+        50-69:  "Código parcialmente correcto. Secciones marcadas como '...' o con pseudo-código en lugar de implementación completa. Manejo de errores incompleto"
+        0-49:   "Código con errores significativos, pseudo-código extenso, o falta de implementación real. Sin manejo de errores"
+
+    - id: completitud
+      name: "Completitud de la Solución"
+      weight: 15
+      description: "¿La solución cubre todos los aspectos necesarios: backend (PHP), frontend (JS), migraciones SQL, testing, rollback, documentación de cambios?"
+      rubric:
+        90-100: "Todos los componentes cubiertos: código PHP completo, código JS/HTML completo, migraciones SQL ejecutables, estrategia de pruebas detallada con criterios de éxito, plan de rollback paso a paso, medición de impacto pre/post"
+        70-89:  "Componentes principales cubiertos con código completo. Migraciones SQL presentes. Pruebas descritas pero sin scripts. Rollback documentado pero a alto nivel"
+        50-69:  "Faltan componentes significativos: frontend sin código completo, migraciones SQL ausentes, pruebas solo mencionadas sin detalle"
+        0-49:   "Solución incompleta: solo ideas generales o pseudo-código. Sin pruebas ni rollback"
+
+    - id: impacto_estimado
+      name: "Impacto Estimado en Reducción de Queries"
+      weight: 15
+      description: "Reducción cuantitativa estimada de queries/min, comparando baseline (~1,320 queries/min con 20 admins) contra el estado post-implementación"
+      rubric:
+        90-100: ">=90% reducción de queries totales (estimado <=132 queries/min). Además, elimina polling frontend o lo reduce >=75%"
+        70-89:  ">=70% reducción de queries (estimado <=396 queries/min). Reduce polling significativamente"
+        50-69:  ">=50% reducción de queries (estimado <=660 queries/min). Reducción moderada de polling"
+        0-49:   "<50% reducción de queries. Impacto marginal en polling o tiempo de respuesta"
+
+    - id: integrabilidad
+      name: "Integrabilidad con el Sistema Existente"
+      weight: 15
+      description: "¿Qué tan bien se integra la solución con la arquitectura actual (PHP 8.x + PostgreSQL 16 + Apache + JS vanilla) sin romper funcionalidad existente? Incluye evaluación de cambios en interfaz, dependencias y compatibilidad hacia atrás"
+      rubric:
+        90-100: "Cambios localizados (pocos archivos). Sin dependencias externas nuevas (usa APCu nativa o PostgreSQL puro). Interfaz pública compatible 100% (mismos endpoints, mismos formatos de respuesta). Sin cambios en llamadores existentes. Fallback automático si algo falla"
+        70-89:  "Cambios moderados (5-10 archivos). Sin dependencias nuevas significativas. Interfaz mayoritariamente compatible. Requiere actualizar algunos llamadores o endpoints existentes. Fallback manual documentado"
+        50-69:  "Cambios significativos (>10 archivos). Nueva dependencia o extensión PECL/PostgreSQL. Interfaz modificada que requiere refactor de llamadores. Algunos endpoints se rompen si no se actualiza el frontend"
+        0-49:   "Cambios arquitectónicos mayores que rompen compatibilidad con frontend existente. Dependencias externas no verificadas. Sin plan de migración o compatibilidad hacia atrás"
+
+    - id: plan_implementacion
+      name: "Plan de Implementación y Rollback"
+      weight: 10
+      description: "Evaluación del plan de implementación: desglose día a día, estimaciones realistas, orden de dependencias, y estrategia de rollback detallada por componente"
+      rubric:
+        90-100: "Plan desglosado por día con archivos específicos a modificar. Estimaciones realistas (basadas en complejidad). Orden de dependencias correcto (migraciones primero, luego backend, luego frontend). Rollback detallado por componente con comando SQL exacto o git checkout. Tiempo de rollback estimado. Scripts de rollback incluidos"
+        70-89:  "Plan claro con hitos. Estimaciones presentes pero conservadoras o agresivas. Rollback definido para cada componente pero sin comandos exactos. Tiempo de rollback no estimado"
+        50-69:  "Plan general sin desglose diario. Estimaciones ausentes o poco realistas. Rollback mencionado de forma superficial (revertir cambios) sin detalle por componente"
+        0-49:   "Sin plan de implementación claro. Sin estimaciones. Sin estrategia de rollback o solo menciona 'git revert'"
+
+    - id: riesgos_residuales
+      name: "Identificación y Mitigación de Riesgos"
+      weight: 5
+      description: "¿La solución identifica riesgos de implementación (cache stampede, degradación, concurrencia, dependencias no disponibles) y propone mitigaciones concretas?"
+      rubric:
+        90-100: "Riesgos específicos identificados con mitigaciones detalladas: cache stampede (apcu_entry/semáforo), degradación graceful sin APCu (fallback a queries directas), concurrencia en SSE/dirty flags, dependencia de extensión PHP verificable. Plan B documentado"
+        70-89:  "Riesgos principales identificados con mitigaciones generales. Menciona fallback pero sin implementación concreta en código. Algún plan B mencionado"
+        50-69:  "Riesgos mencionados superficialmente (p.ej. 'si falla el caché') pero sin mitigaciones en código ni plan B concreto"
+        0-49:   "No identifica riesgos de implementación. Asume que todo funcionará correctamente sin fallbacks"
+
+    - id: testing_verificacion
+      name: "Testing y Verificación de Resultados"
+      weight: 5
+      description: "¿La solución incluye estrategia de pruebas (unitarias, integración, carga) con criterios de éxito cuantificables y método de verificación de reducción de queries?"
+      rubric:
+        90-100: "Pruebas detalladas por componente con criterio de éxito cuantificable (p.ej. 'segunda llamada: 0 queries SQL'). Scripts de prueba PHP/curl incluidos. Medición de baseline y post-implementación documentada. Pruebas de concurrencia/stampede. Verificación con EXPLAIN ANALYZE o pg_stat_activity"
+        70-89:  "Pruebas descritas con criterios de éxito claros pero sin scripts ejecutables. Método de verificación mencionado pero no detallado"
+        50-69:  "Pruebas mencionadas a alto nivel sin criterios de éxito claros. Sin método de verificación cuantitativo"
+        0-49:   "Sin estrategia de pruebas o solo menciona 'probar en staging' sin detalle"
+
+  scoring:
+    type: "weighted_sum"
+    formula: "Puntaje_Total = Σ(score_i × weight_i) / 100"
+    output_format:
+      file: ".specs/research/oti-evaluacion-F4-{juez_id}.md"
+      template: |
+        # Evaluación Fase 4 — Juez {juez_id}
+        **Solución evaluada:** {solution_name}
+        **Puntaje total:** {puntaje_total}/100
+
+        ## Desglose por criterio
+
+        {criteria_table}
+
+        ## Justificación
+        {justificacion}
+
+        ## Veredicto
+        **Puntaje ponderado:** {puntaje_total}/100
+        **Decisión:** {decision}
+
+  instructions_for_judges:
+    - "Cada juez debe leer la solución completa asignada y asignar un score (0-100) para cada criterio."
+    - "Usar la rúbrica como guía: el score debe caer dentro del rango que mejor describa la solución."
+    - "Proveer justificación textual para cada score, citando secciones específicas de la solución."
+    - "El puntaje total se calcula como suma ponderada: Σ(score_i × weight_i) / 100"
+    - "Decisión: Aprobar si puntaje >= 75, Rechazar si < 50, Revisión si entre 50-74."
+    - "Prestar atención especial a si el código es REAL (sintácticamente correcto y completo) vs pseudo-código."
+    - "Verificar que los planes de rollback sean técnicamente viables, no solo mencionados."
+    - "Las soluciones compiten entre sí: el ranking final determinará cuál se implementa."

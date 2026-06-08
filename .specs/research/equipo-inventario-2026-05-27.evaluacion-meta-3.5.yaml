@@ -1,0 +1,134 @@
+# Phase 3.5 — Evaluation Meta-Judge Specification
+# For scoring 3 full expanded solution documents (A1, C1, B1)
+# Date: 2026-05-27
+
+evaluation_spec:
+  title: "Equipos.php Redesign — Full Solution Evaluation"
+  method: "Weighted-sum scoring across 8 criteria (1-5 scale)"
+
+  disqualifying_red_flags:
+    - "Proposes backend changes to app/api/equipos.php or app/Models/Equipment.php"
+    - "Introduces npm, build tools, or external JS frameworks beyond Lucide"
+    - "Contains English user-facing strings (100% Spanish required)"
+    - "Uses hardcoded hex colors instead of CSS custom properties from app.css"
+
+  criteria:
+    - id: req_coverage
+      name: "Requirements Coverage"
+      weight: 0.22
+      description: |
+        Does the solution cover ALL 11 features?
+        1. Stats grid (4 cards with animated counts)
+        2. Filter system (location hierarchy select, status select, search with debounce)
+        3. Equipment table (8 columns, responsive overflow)
+        4. Action buttons (view, edit) + action dropdown (deactivate/reactivate/delete-permanent)
+        5. Modal: Ver Equipo (detail grid with all fields)
+        6. Modal: Editar Equipo (form with all fields, pre-filled)
+        7. Modal: Crear Equipo (empty form)
+        8. Modal: Desactivar Equipo (with reason textarea)
+        9. Modal: Eliminar Permanentemente (with reason textarea)
+        10. Toast notifications (success/error/warning)
+        11. Pagination (API-driven, page buttons with ellipsis, "Mostrando X-Y de Z")
+
+    - id: design_ux
+      name: "Design & UX Polish"
+      weight: 0.18
+      description: |
+        Quality of visual design improvements:
+        - Animated stat counters (count-up animation)
+        - Lucide icons used consistently
+        - Staggered/chunked visual hierarchy
+        - Hover/active states on interactive elements
+        - Modal transition polish (fadeIn, scaleIn)
+        - Empty state, loading state, error state visuals
+        - Visual consistency with existing app.css design system
+
+    - id: technical_feasibility
+      name: "Technical Feasibility"
+      weight: 0.18
+      description: |
+        Can this be implemented as a single PHP file with inline <style>/<script>?
+        - No backend changes required
+        - No build tools or npm
+        - No extra CDN dependencies
+        - Uses existing partials unchanged
+        - Realistic JS complexity for a single-file view
+        - All API calls use existing endpoints and response shapes
+
+    - id: architectural_quality
+      name: "Architectural Quality"
+      weight: 0.12
+      description: |
+        Code organization and maintainability:
+        - Clear separation of concerns (PHP > CSS > HTML > JS)
+        - DRY patterns (shared form fragments, reusable arrays)
+        - Event delegation strategy (no inline onclick)
+        - State management pattern (predictable, debuggable)
+        - Namespace/encapsulation (no global pollution)
+
+    - id: implementation_clarity
+      name: "Implementation Clarity"
+      weight: 0.10
+      description: |
+        How specific and actionable is the solution?
+        - Exact CSS class names with app.css token references
+        - Complete JS function signatures and logic
+        - All HTML structure specified (not "similar to existing")
+        - Pagination HTML and JS behavior detailed
+        - Modal content structure detailed
+        - Form field names and options enumerated
+
+    - id: mobile_responsiveness
+      name: "Mobile Responsiveness"
+      weight: 0.08
+      description: |
+        How well does the solution handle mobile?
+        - Stats grid 4→2→1 column collapse
+        - Table horizontal scroll or card alternative
+        - Filters vertical stack on mobile
+        - Modals full-width on mobile
+        - Action dropdowns usable on touch devices
+        - Touch-friendly tap targets (min 44px)
+
+    - id: error_loading_states
+      name: "Error & Loading States"
+      weight: 0.07
+      description: |
+        Handling of non-nominal states:
+        - Loading state: skeleton shimmer or spinner
+        - Empty state: message when no results
+        - Error state: API failure messages
+        - Network error handling
+        - Graceful degradation when JSON parsing fails
+        - Non-blocking toast for async operations
+
+    - id: accessibility
+      name: "Accessibility"
+      weight: 0.05
+      description: |
+        Accessibility considerations:
+        - prefers-reduced-motion media query
+        - Keyboard navigation for modals (ESC to close)
+        - Focus management on modal open/close
+        - ARIA attributes where needed
+        - Sufficient color contrast
+        - Skip-link (already in head.php)
+        - Respects existing WCAG patterns in app.css
+
+  scoring_scale:
+    5: "Exemplary — fully addresses criterion with specific, correct, production-ready details"
+    4: "Good — addresses criterion well with minor gaps"
+    3: "Adequate — addresses criterion but lacks specificity or has notable gaps"
+    2: "Weak — partially addresses criterion with significant gaps"
+    1: "Poor — fails to address criterion or does so incorrectly"
+
+  output_format:
+    "Each judge must produce a Markdown report with:
+    1. Scores table (8 criteria × 3 proposals)
+    2. Detailed rationale for each score
+    3. Overall weighted scores (ranked)
+    4. A VOTE block at the end with:
+       VOTE: [A1|C1|B1]
+       SCORES: {A1: X.XX, C1: X.XX, B1: X.XX}
+       RATIONALE: 2-3 sentence justification
+    "
